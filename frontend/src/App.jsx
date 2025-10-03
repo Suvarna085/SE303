@@ -1,0 +1,114 @@
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider, useAuth } from "./context/AuthContext";
+import Login from "./components/auth/Login";
+import Register from "./components/auth/Register";
+import ExaminerDashboard from "./components/examiner/ExaminerDashboard";
+import StudentDashboard from "./components/student/StudentDashboard";
+import CreateExam from "./components/examiner/CreateExam";
+import TakeExam from "./components/student/TakeExam";
+import ExamResults from "./components/student/ExamResults";
+import "./styles/index.css";
+
+const ProtectedRoute = ({ children, requiredRole }) => {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return <div className="loading">Loading...</div>;
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (requiredRole && user.role !== requiredRole) {
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
+};
+
+const AppRoutes = () => {
+  const { user } = useAuth();
+
+  return (
+    <Routes>
+      <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
+      <Route
+        path="/register"
+        element={!user ? <Register /> : <Navigate to="/" />}
+      />
+
+      <Route
+        path="/"
+        element={
+          user ? (
+            user.role === "examiner" ? (
+              <Navigate to="/examiner/dashboard" />
+            ) : (
+              <Navigate to="/student/dashboard" />
+            )
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
+      />
+
+      <Route
+        path="/examiner/dashboard"
+        element={
+          <ProtectedRoute requiredRole="examiner">
+            <ExaminerDashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/examiner/create-exam"
+        element={
+          <ProtectedRoute requiredRole="examiner">
+            <CreateExam />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/student/dashboard"
+        element={
+          <ProtectedRoute requiredRole="student">
+            <StudentDashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/student/exam/:examId"
+        element={
+          <ProtectedRoute requiredRole="student">
+            <TakeExam />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/student/results"
+        element={
+          <ProtectedRoute requiredRole="student">
+            <ExamResults />
+          </ProtectedRoute>
+        }
+      />
+    </Routes>
+  );
+};
+
+function App() {
+  return (
+    <AuthProvider>
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
+    </AuthProvider>
+  );
+}
+
+export default App;
