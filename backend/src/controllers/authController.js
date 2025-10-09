@@ -31,10 +31,6 @@ const register = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(password, salt);
 
-    // Generate email verification token
-    const verificationToken = generateVerificationToken();
-    const verificationExpires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
-
     // Create user
     const { data: newUser, error } = await supabaseAdmin
       .from("users")
@@ -51,24 +47,6 @@ const register = async (req, res) => {
       .single();
 
     if (error) throw error;
-
-    res.status(201).json({
-      success: true,
-      message: "Registration successful. You can now login.",
-      data: {
-        userId: newUser.id,
-        name: newUser.name,
-        email: newUser.email,
-        role: newUser.role,
-      },
-    });
-
-    // TODO: Send verification email (skip for now)
-    // For development, we'll auto-verify
-    await supabaseAdmin
-      .from("users")
-      .update({ is_email_verified: true })
-      .eq("id", newUser.id);
 
     res.status(201).json({
       success: true,
@@ -118,14 +96,6 @@ const login = async (req, res) => {
         message: "Invalid email or password",
       });
     }
-
-    // Check email verification (skip for now)
-    // if (!user.is_email_verified) {
-    //   return res.status(401).json({
-    //     success: false,
-    //     message: 'Please verify your email first'
-    //   });
-    // }
 
     // Deactivate any existing active sessions (single device login)
     await supabaseAdmin

@@ -54,6 +54,23 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+.leaderboard-table {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.leaderboard-table .top-rank {
+  background: #fff3cd;
+  font-weight: 600;
+}
+
+.rank {
+  font-size: 24px;
+  text-align: center;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

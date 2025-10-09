@@ -7,6 +7,7 @@ import StudentDashboard from "./components/student/StudentDashboard";
 import CreateExam from "./components/examiner/CreateExam";
 import TakeExam from "./components/student/TakeExam";
 import ExamResults from "./components/student/ExamResults";
+import Leaderboard from "./components/examiner/Leaderboard";
 import "./styles/index.css";
 
 const ProtectedRoute = ({ children, requiredRole }) => {
@@ -85,6 +86,15 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute requiredRole="student">
             <TakeExam />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/examiner/exam/:examId/leaderboard"
+        element={
+          <ProtectedRoute requiredRole="examiner">
+            <Leaderboard />
           </ProtectedRoute>
         }
       />
