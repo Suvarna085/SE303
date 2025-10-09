@@ -95,6 +95,16 @@ export default function ExaminerDashboard() {
                       Publish
                     </button>
                   )}
+                  {exam.is_published && (
+                    <button
+                      onClick={() =>
+                        navigate(`/examiner/exam/${exam.id}/leaderboard`)
+                      }
+                      className="btn-secondary"
+                    >
+                      View Leaderboard
+                    </button>
+                  )}
                 </div>
               </div>
             ))}

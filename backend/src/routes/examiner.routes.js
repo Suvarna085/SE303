@@ -6,6 +6,7 @@ const {
   publishExam,
   getMyExams,
   getExamAnalytics,
+  getExamLeaderboard
 } = require("../controllers/examinerController");
 const { examCreationValidation, validate } = require("../utils/validators");
 const { authenticate, isExaminer } = require("../middleware/auth");
@@ -27,5 +28,8 @@ router.put("/exams/:examId/publish", publishExam);
 
 // Get exam analytics and results
 router.get("/exams/:examId/analytics", getExamAnalytics);
+
+// Get leaderboard for exam
+router.get('/exams/:examId/leaderboard', getExamLeaderboard);
 
 module.exports = router;

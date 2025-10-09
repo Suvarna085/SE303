@@ -258,6 +258,42 @@ const getExamAnalytics = async (req, res) => {
     });
   }
 };
+
+// Get leaderboard for a specific exam
+const getExamLeaderboard = async (req, res) => {
+  try {
+    const { examId } = req.params;
+
+    const { data: leaderboard, error } = await supabaseAdmin
+      .from('results')
+      .select(`
+        id,
+        score,
+        percentage,
+        time_taken,
+        evaluated_at,
+        users:student_id (name, email)
+      `)
+      .eq('exam_id', examId)
+      .order('percentage', { ascending: false })
+      .order('time_taken', { ascending: true })
+      .limit(10);
+
+    if (error) throw error;
+
+    res.status(200).json({
+      success: true,
+      data: leaderboard
+    });
+  } catch (error) {
+    console.error('Get leaderboard error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to get leaderboard',
+      error: error.message
+    });
+  }
+};
 // Napa end
 
 // Modules export
@@ -267,4 +303,5 @@ module.exports = {
   publishExam,
   getMyExams,
   getExamAnalytics,
+  getExamLeaderboard,
 };
