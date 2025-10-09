@@ -1,6 +1,49 @@
 const { supabaseAdmin } = require("../config/database");
 const { generateQuestions } = require("../services/questionGenerationService");
 
+
+// Suvarna start
+// Publish exam
+const publishExam = async (req, res) => {
+  try {
+    const { examId } = req.params;
+    const examinerId = req.user.userId;
+
+    const { data: exam, error } = await supabaseAdmin
+      .from("exams")
+      .update({
+        is_published: true,
+        published_at: new Date(),
+      })
+      .eq("id", examId)
+      .eq("examiner_id", examinerId)
+      .select()
+      .single();
+
+    if (error || !exam) {
+      return res.status(404).json({
+        success: false,
+        message: "Exam not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Exam published successfully",
+      data: exam,
+    });
+  } catch (error) {
+    console.error("Publish exam error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to publish exam",
+      error: error.message,
+    });
+  }
+};
+// Suvarna end
+
+// Varun start
 // Create exam and generate questions
 const createExam = async (req, res) => {
   try {
@@ -117,46 +160,9 @@ const getExamPreview = async (req, res) => {
     });
   }
 };
+// Varun end
 
-// Publish exam (make it available to students)
-const publishExam = async (req, res) => {
-  try {
-    const { examId } = req.params;
-    const examinerId = req.user.userId;
-
-    const { data: exam, error } = await supabaseAdmin
-      .from("exams")
-      .update({
-        is_published: true,
-        published_at: new Date(),
-      })
-      .eq("id", examId)
-      .eq("examiner_id", examinerId)
-      .select()
-      .single();
-
-    if (error || !exam) {
-      return res.status(404).json({
-        success: false,
-        message: "Exam not found",
-      });
-    }
-
-    res.status(200).json({
-      success: true,
-      message: "Exam published successfully",
-      data: exam,
-    });
-  } catch (error) {
-    console.error("Publish exam error:", error);
-    res.status(500).json({
-      success: false,
-      message: "Failed to publish exam",
-      error: error.message,
-    });
-  }
-};
-
+// Napa start
 // Get all exams created by examiner
 const getMyExams = async (req, res) => {
   try {
@@ -252,7 +258,9 @@ const getExamAnalytics = async (req, res) => {
     });
   }
 };
+// Napa end
 
+// Modules export
 module.exports = {
   createExam,
   getExamPreview,

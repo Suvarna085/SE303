@@ -1,4 +1,4 @@
-// Global error handler middleware
+// Varun 
 const errorHandler = (err, req, res, next) => {
   console.error("Error:", err);
 

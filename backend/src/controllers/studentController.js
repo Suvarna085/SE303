@@ -1,6 +1,7 @@
 const { supabaseAdmin } = require("../config/database");
 const { shuffleArray, calculatePercentage } = require("../utils/helpers");
 
+// Suvarna start
 // Get all published exams available to students
 const getAvailableExams = async (req, res) => {
   try {
@@ -35,7 +36,9 @@ const getAvailableExams = async (req, res) => {
     });
   }
 };
+// Suvarna end
 
+// Varun start
 // Start exam attempt
 const startExam = async (req, res) => {
   try {
@@ -297,7 +300,9 @@ const submitExam = async (req, res) => {
     });
   }
 };
+// Varun end
 
+// Napa start
 // Get student's exam results
 const getMyResults = async (req, res) => {
   try {
@@ -370,7 +375,9 @@ const getExamResult = async (req, res) => {
     });
   }
 };
+// Napa end
 
+// Modules to export
 module.exports = {
   getAvailableExams,
   startExam,
