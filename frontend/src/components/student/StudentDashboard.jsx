@@ -103,6 +103,7 @@ export default function StudentDashboard() {
                   <th>Score</th>
                   <th>Percentage</th>
                   <th>Date</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -112,9 +113,24 @@ export default function StudentDashboard() {
                     <td>
                       {result.score}/{result.total_questions}
                     </td>
-                    <td>{result.percentage}%</td>
+                    <td className={result.percentage >= 60 ? "pass" : "fail"}>
+                      {result.percentage}%
+                    </td>
                     <td>
                       {new Date(result.evaluated_at).toLocaleDateString()}
+                    </td>
+                    <td>
+                      <button
+                        onClick={() =>
+                          navigate(
+                            `/student/attempts/${result.attempt_id}/review`
+                          )
+                        }
+                        className="btn-secondary"
+                        style={{ padding: "5px 10px", fontSize: "14px" }}
+                      >
+                        View Review
+                      </button>
                     </td>
                   </tr>
                 ))}

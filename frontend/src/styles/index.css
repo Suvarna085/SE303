@@ -318,3 +318,269 @@ th {
   max-width: 600px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
+
+/* Review Page Styles */
+.review-page {
+  min-height: 100vh;
+  background: #f5f7fa;
+}
+
+.review-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+.score-card-large {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  margin-bottom: 40px;
+}
+
+.score-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.score-header h1 {
+  margin: 0;
+  font-size: 28px;
+  color: white;
+}
+
+.difficulty-badge {
+  background: rgba(255,255,255,0.3);
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.score-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+}
+
+.stat-box {
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.stat-icon {
+  font-size: 32px;
+}
+
+.stat-content h3 {
+  margin: 0 0 5px 0;
+  font-size: 12px;
+  text-transform: uppercase;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+.stat-value {
+  margin: 0;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.pass-color {
+  color: #6ef06e;
+}
+
+.fail-color {
+  color: #ff6b6b;
+}
+
+.correct-text {
+  color: #6ef06e;
+}
+
+.wrong-text {
+  color: #ff6b6b;
+}
+
+.questions-review-section {
+  margin-top: 40px;
+}
+
+.section-title {
+  font-size: 24px;
+  margin-bottom: 25px;
+  color: #2c3e50;
+}
+
+.question-review-card {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border: 2px solid #f0f0f0;
+}
+
+.question-number-badge {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.question-number-badge span:first-child {
+  font-weight: 600;
+  color: #667eea;
+  font-size: 16px;
+}
+
+.badge-correct {
+  background: #d4edda;
+  color: #155724;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.badge-incorrect {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.question-text-review {
+  font-size: 18px;
+  color: #2c3e50;
+  margin-bottom: 25px;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+.options-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.option-box {
+  padding: 18px 20px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  background: #fafafa;
+  transition: all 0.2s;
+}
+
+.option-box.option-correct {
+  border-color: #28a745;
+  background: #d4edda;
+}
+
+.option-box.option-wrong {
+  border-color: #dc3545;
+  background: #f8d7da;
+}
+
+.option-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 8px;
+}
+
+.option-letter {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: #667eea;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.option-correct .option-letter {
+  background: #28a745;
+}
+
+.option-wrong .option-letter {
+  background: #dc3545;
+}
+
+.option-text {
+  font-size: 16px;
+  color: #2c3e50;
+  flex: 1;
+}
+
+.option-indicators {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+  padding-left: 50px;
+}
+
+.indicator {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 12px;
+}
+
+.correct-indicator {
+  background: #28a745;
+  color: white;
+}
+
+.your-answer-correct {
+  background: #155724;
+  color: white;
+}
+
+.your-answer-wrong {
+  background: #dc3545;
+  color: white;
+}
+
+.review-footer-actions {
+  text-align: center;
+  margin-top: 50px;
+  padding: 30px 0;
+}
+
+.btn-primary-large {
+  padding: 15px 50px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-primary-large:hover {
+  background: #5568d3;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}

@@ -7,6 +7,7 @@ const {
   submitExam,
   getMyResults,
   getExamResult,
+  getExamReview
 } = require("../controllers/studentController");
 const { authenticate, isStudent } = require("../middleware/auth");
 
@@ -30,5 +31,8 @@ router.get("/results", getMyResults);
 
 // Get result for specific exam
 router.get("/exams/:examId/result", getExamResult);
+
+// Get detailed review of completed exam
+router.get('/attempts/:attemptId/review', getExamReview);
 
 module.exports = router;

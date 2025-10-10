@@ -64,24 +64,23 @@ export default function TakeExam() {
     }
   };
 
-  const handleSubmit = async () => {
-    if (!window.confirm("Are you sure you want to submit the exam?")) {
-      return;
-    }
+const handleSubmit = async () => {
+  if (!window.confirm("Are you sure you want to submit the exam?")) {
+    return;
+  }
 
-    setSubmitting(true);
-    try {
-      const response = await api.post(`/student/attempts/${attemptId}/submit`);
-      const result = response.data.data;
-      alert(
-        `Exam submitted! Your score: ${result.score}/${result.totalQuestions} (${result.percentage}%)`
-      );
-      navigate("/student/dashboard");
-    } catch (error) {
-      alert("Failed to submit exam");
-      setSubmitting(false);
-    }
-  };
+  setSubmitting(true);
+  try {
+    const response = await api.post(`/student/attempts/${attemptId}/submit`);
+    const result = response.data.data;
+
+    // Redirect to review page instead of dashboard
+    navigate(`/student/attempts/${attemptId}/review`);
+  } catch (error) {
+    alert("Failed to submit exam");
+    setSubmitting(false);
+  }
+};
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
