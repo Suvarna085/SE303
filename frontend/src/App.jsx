@@ -9,6 +9,7 @@ import CreateExam from "./components/examiner/CreateExam";
 import TakeExam from "./components/student/TakeExam";
 import ExamResults from "./components/student/ExamResults";
 import Leaderboard from "./components/examiner/Leaderboard";
+import ExamReview from "./components/student/ExamReview";
 import "./styles/index.css";
 
 const ProtectedRoute = ({ children, requiredRole }) => {
@@ -105,6 +106,15 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute requiredRole="student">
             <ExamResults />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/student/attempts/:attemptId/review"
+        element={
+          <ProtectedRoute requiredRole="student">
+            <ExamReview />
           </ProtectedRoute>
         }
       />
