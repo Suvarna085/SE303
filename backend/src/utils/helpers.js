@@ -1,5 +1,6 @@
 const crypto = require("crypto");
 
+// Suvarna start
 // Generate random token for email verification
 const generateVerificationToken = () => {
   return crypto.randomBytes(32).toString("hex");
@@ -10,11 +11,13 @@ const generateDeviceFingerprint = (req) => {
   const userAgent = req.headers["user-agent"] || "";
   const ip = req.ip || req.connection.remoteAddress || "";
   return crypto
-    .createHash("sha256")
-    .update(userAgent + ip)
-    .digest("hex");
+  .createHash("sha256")
+  .update(userAgent + ip)
+  .digest("hex");
 };
+// Suvarna end
 
+// Varun start
 // Shuffle array (Fisher-Yates algorithm) for question randomization
 const shuffleArray = (array) => {
   const shuffled = [...array];
@@ -24,7 +27,9 @@ const shuffleArray = (array) => {
   }
   return shuffled;
 };
+// Varun end
 
+// Napa start
 // Calculate percentage
 const calculatePercentage = (scored, total) => {
   if (total === 0) return 0;
@@ -35,7 +40,9 @@ const calculatePercentage = (scored, total) => {
 const formatDate = (date) => {
   return new Date(date).toLocaleString();
 };
+// Napa end
 
+// Modules to export
 module.exports = {
   generateVerificationToken,
   generateDeviceFingerprint,

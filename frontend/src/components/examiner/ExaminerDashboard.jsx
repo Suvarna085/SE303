@@ -1,3 +1,4 @@
+// Suvarna and Varun
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
@@ -82,7 +83,7 @@ export default function ExaminerDashboard() {
                 </p>
                 <p>
                   <strong>Status:</strong>{" "}
-                  {exam.is_published ? "✅ Published" : "⏳ Draft"}
+                  {exam.is_published ? "Published" : "Draft"}
                 </p>
 
                 <div className="card-actions">

@@ -1,3 +1,4 @@
+// All add their page once done
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Login from "./components/auth/Login";

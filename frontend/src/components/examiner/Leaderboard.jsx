@@ -36,7 +36,7 @@ export default function Leaderboard() {
       </nav>
 
       <div className="content">
-        <h1>🏆 Top Performers</h1>
+        <h1>Top Performers</h1>
 
         {loading ? (
           <div className="loading">Loading...</div>
@@ -61,9 +61,9 @@ export default function Leaderboard() {
                 {leaderboard.map((entry, index) => (
                   <tr key={entry.id} className={index < 3 ? "top-rank" : ""}>
                     <td className="rank">
-                      {index === 0 && "🥇"}
-                      {index === 1 && "🥈"}
-                      {index === 2 && "🥉"}
+                      {index === 0}
+                      {index === 1}
+                      {index === 2}
                       {index > 2 && `#${index + 1}`}
                     </td>
                     <td>{entry.users.name}</td>
