@@ -49,7 +49,7 @@ export default function ExamReview() {
   return (
     <div className="review-page">
       <nav className="navbar">
-        <h2>📝 Exam Review</h2>
+        <h2>Exam Review</h2>
         <button
           onClick={() => navigate("/student/dashboard")}
           className="btn-secondary"
@@ -77,7 +77,6 @@ export default function ExamReview() {
             </div>
 
             <div className="stat-box percentage-box">
-              <div className="stat-icon">📊</div>
               <div className="stat-content">
                 <h3>Percentage</h3>
                 <p
@@ -118,7 +117,7 @@ export default function ExamReview() {
 
         {/* Questions Review */}
         <div className="questions-review-section">
-          <h2 className="section-title">📋 Detailed Review</h2>
+          <h2 className="section-title">Detailed Review</h2>
 
           {review.map((item, index) => (
             <div key={item.question_id} className="question-review-card">
