@@ -83,7 +83,7 @@ export default function ExaminerDashboard() {
                 </p>
                 <p>
                   <strong>Status:</strong>{" "}
-                  {exam.is_published ? "✅ Published" : "⏳ Draft"}
+                  {exam.is_published ? "Published" : "Draft"}
                 </p>
 
                 <div className="card-actions">

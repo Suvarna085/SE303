@@ -28,7 +28,6 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Only logout if it's a real auth failure, not just any 401
     if (error.response?.status === 401 && error.config.url.includes("/auth/")) {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
