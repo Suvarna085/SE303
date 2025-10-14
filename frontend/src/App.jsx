@@ -11,6 +11,7 @@ import ExamResults from "./components/student/ExamResults";
 import Leaderboard from "./components/examiner/Leaderboard";
 import ExamReview from "./components/student/ExamReview";
 import Analytics from "./components/examiner/Analytics";
+import LandingPage from "./components/LandingPage"; // <-- Import your landing page
 import "./styles/index.css";
 
 const ProtectedRoute = ({ children, requiredRole }) => {
@@ -21,7 +22,7 @@ const ProtectedRoute = ({ children, requiredRole }) => {
   }
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/" replace />;
   }
 
   if (requiredRole && user.role !== requiredRole) {
@@ -36,27 +37,14 @@ const AppRoutes = () => {
 
   return (
     <Routes>
+      {/* Landing Page */}
+      <Route path="/" element={!user ? <LandingPage /> : <Navigate to={user.role === "examiner" ? "/examiner/dashboard" : "/student/dashboard"} />} />
+
+      {/* Auth Routes */}
       <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
-      <Route
-        path="/register"
-        element={!user ? <Register /> : <Navigate to="/" />}
-      />
+      <Route path="/register" element={!user ? <Register /> : <Navigate to="/" />} />
 
-      <Route
-        path="/"
-        element={
-          user ? (
-            user.role === "examiner" ? (
-              <Navigate to="/examiner/dashboard" />
-            ) : (
-              <Navigate to="/student/dashboard" />
-            )
-          ) : (
-            <Navigate to="/login" />
-          )
-        }
-      />
-
+      {/* Examiner Routes */}
       <Route
         path="/examiner/dashboard"
         element={
@@ -65,7 +53,6 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-
       <Route
         path="/examiner/create-exam"
         element={
@@ -74,25 +61,6 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-
-      <Route
-        path="/student/dashboard"
-        element={
-          <ProtectedRoute requiredRole="student">
-            <StudentDashboard />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/student/exam/:examId"
-        element={
-          <ProtectedRoute requiredRole="student">
-            <TakeExam />
-          </ProtectedRoute>
-        }
-      />
-
       <Route
         path="/examiner/exam/:examId/leaderboard"
         element={
@@ -101,25 +69,6 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-
-      <Route
-        path="/student/results"
-        element={
-          <ProtectedRoute requiredRole="student">
-            <ExamResults />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/student/attempts/:attemptId/review"
-        element={
-          <ProtectedRoute requiredRole="student">
-            <ExamReview />
-          </ProtectedRoute>
-        }
-      />
-
       <Route
         path="/examiner/exams/:examId/analytics"
         element={
@@ -128,9 +77,44 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+
+      {/* Student Routes */}
+      <Route
+        path="/student/dashboard"
+        element={
+          <ProtectedRoute requiredRole="student">
+            <StudentDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/student/exam/:examId"
+        element={
+          <ProtectedRoute requiredRole="student">
+            <TakeExam />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/student/results"
+        element={
+          <ProtectedRoute requiredRole="student">
+            <ExamResults />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/student/attempts/:attemptId/review"
+        element={
+          <ProtectedRoute requiredRole="student">
+            <ExamReview />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 };
+
 
 function App() {
   return (
