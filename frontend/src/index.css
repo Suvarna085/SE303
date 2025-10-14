@@ -71,6 +71,17 @@ button:focus-visible {
   text-align: center;
 }
 
+.exam-stats {
+  margin-top: 10px;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 5px;
+}
+
+.exam-stats p {
+  margin: 5px 0;
+}
+
 
 
 @media (prefers-color-scheme: light) {

@@ -1,4 +1,3 @@
-// Suvarna and Varun
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
@@ -6,6 +5,7 @@ import api from "../../services/api";
 
 export default function ExaminerDashboard() {
   const [exams, setExams] = useState([]);
+  const [examStats, setExamStats] = useState({});
   const [loading, setLoading] = useState(true);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -17,11 +17,37 @@ export default function ExaminerDashboard() {
   const fetchExams = async () => {
     try {
       const response = await api.get("/examiner/exams");
-      setExams(response.data.data);
+      const examsData = response.data.data;
+      setExams(examsData);
+
+      // Fetch statistics for each published exam
+      const statsPromises = examsData
+        .filter((exam) => exam.is_published)
+        .map((exam) => fetchExamStats(exam.id));
+
+      await Promise.all(statsPromises);
     } catch (error) {
       console.error("Fetch exams error:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchExamStats = async (examId) => {
+    try {
+      const response = await api.get(`/examiner/exams/${examId}/analytics`);
+      const data = response.data.data;
+
+      setExamStats((prev) => ({
+        ...prev,
+        [examId]: {
+          totalAttempts: data.statistics.totalAttempts,
+          averageScore: data.statistics.averageScore,
+          averagePercentage: data.statistics.averagePercentage,
+        },
+      }));
+    } catch (error) {
+      console.error(`Fetch stats error for exam ${examId}:`, error);
     }
   };
 
@@ -83,8 +109,37 @@ export default function ExaminerDashboard() {
                 </p>
                 <p>
                   <strong>Status:</strong>{" "}
-                  {exam.is_published ? "Published" : "Draft"}
+                  {exam.is_published ? "✅ Published" : "⏳ Draft"}
                 </p>
+
+                {/* Statistics Section */}
+                {exam.is_published && examStats[exam.id] && (
+                  <div className="exam-stats">
+                    <hr
+                      style={{ margin: "15px 0", border: "1px solid #eee" }}
+                    />
+                    <p>
+                      <strong>📊 Statistics:</strong>
+                    </p>
+                    <p style={{ fontSize: "14px", color: "#666" }}>
+                      <strong>Total Attempts:</strong>{" "}
+                      {examStats[exam.id].totalAttempts}
+                    </p>
+                    {examStats[exam.id].totalAttempts > 0 && (
+                      <>
+                        <p style={{ fontSize: "14px", color: "#666" }}>
+                          <strong>Avg Score:</strong>{" "}
+                          {examStats[exam.id].averageScore} /{" "}
+                          {exam.total_questions}
+                        </p>
+                        <p style={{ fontSize: "14px", color: "#666" }}>
+                          <strong>Avg Percentage:</strong>{" "}
+                          {examStats[exam.id].averagePercentage}%
+                        </p>
+                      </>
+                    )}
+                  </div>
+                )}
 
                 <div className="card-actions">
                   {!exam.is_published && (
@@ -96,14 +151,25 @@ export default function ExaminerDashboard() {
                     </button>
                   )}
                   {exam.is_published && (
-                    <button
-                      onClick={() =>
-                        navigate(`/examiner/exam/${exam.id}/leaderboard`)
-                      }
-                      className="btn-secondary"
-                    >
-                      View Leaderboard
-                    </button>
+                    <>
+                      <button
+                        onClick={() =>
+                          navigate(`/examiner/exam/${exam.id}/leaderboard`)
+                        }
+                        className="btn-secondary"
+                      >
+                        View Leaderboard
+                      </button>
+                      <button
+                        onClick={() =>
+                          navigate(`/examiner/exams/${exam.id}/analytics`)
+                        }
+                        className="btn-secondary"
+                        style={{ marginLeft: "10px" }}
+                      >
+                        Full Analytics
+                      </button>
+                    </>
                   )}
                 </div>
               </div>

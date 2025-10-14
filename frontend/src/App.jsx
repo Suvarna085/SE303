@@ -10,6 +10,7 @@ import TakeExam from "./components/student/TakeExam";
 import ExamResults from "./components/student/ExamResults";
 import Leaderboard from "./components/examiner/Leaderboard";
 import ExamReview from "./components/student/ExamReview";
+import Analytics from "./components/examiner/Analytics";
 import "./styles/index.css";
 
 const ProtectedRoute = ({ children, requiredRole }) => {
@@ -115,6 +116,15 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute requiredRole="student">
             <ExamReview />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/examiner/exams/:examId/analytics"
+        element={
+          <ProtectedRoute requiredRole="examiner">
+            <Analytics />
           </ProtectedRoute>
         }
       />
