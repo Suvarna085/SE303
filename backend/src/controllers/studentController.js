@@ -246,6 +246,13 @@ const submitExam = async (req, res) => {
     const endTimeUTC = currentTime.getTime();
     const diffInMilliseconds = endTimeUTC - startTimeUTC;
     const timeTakenSeconds = Math.max(1, Math.ceil(diffInMilliseconds / 1000));
+      
+      
+    // const startTimeUTC = new Date(attempt.start_time).getTime(); // removed "Z"
+    // const endTimeUTC = currentTime.getTime();
+    // const diffInMilliseconds = endTimeUTC - startTimeUTC;
+    // const timeTakenSeconds = Math.max(1, Math.ceil(diffInMilliseconds / 1000));
+    
 
     console.log("Time calculation debug:");
     console.log("Difference (ms):", diffInMilliseconds);
