@@ -28,7 +28,13 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401 && error.config.url.includes("/auth/")) {
+    // Only redirect to login if it's a 401 on a protected route
+    // NOT on login/register attempts
+    if (
+      error.response?.status === 401 && 
+      !error.config.url.includes("/auth/login") &&
+      !error.config.url.includes("/auth/register")
+    ) {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       window.location.href = "/login";
