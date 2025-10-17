@@ -25,7 +25,7 @@ export default function TakeExam() {
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
-          handleSubmit();
+          handleSubmit(true);
           return 0;
         }
         return prev - 1;
@@ -65,16 +65,16 @@ export default function TakeExam() {
     }
   };
 
-const handleSubmit = async () => {
-  if (!window.confirm("Are you sure you want to submit the exam?")) {
+const handleSubmit = async (auto=false) => {
+  if (!auto && !window.confirm("Are you sure you want to submit the exam?")) {
     return;
   }
 
-  setSubmitting(true);
   try {
     const response = await api.post(`/student/attempts/${attemptId}/submit`);
     const result = response.data.data;
-
+    setSubmitting(true);
+    
     // Redirect to review page instead of dashboard
     navigate(`/student/attempts/${attemptId}/review`);
   } catch (error) {

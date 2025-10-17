@@ -18,7 +18,7 @@ const generateDeviceFingerprint = (req) => {
 // Suvarna end
 
 // Varun start
-// Shuffle array (Fisher-Yates algorithm) for question randomization
+//* Shuffle array for question randomization
 const shuffleArray = (array) => {
   const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
