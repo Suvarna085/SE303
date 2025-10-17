@@ -12,23 +12,39 @@ export default function Login() {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
-
-    try {
-      const user = await login(email, password);
-      if (user.role === "examiner") {
-        navigate("/examiner/dashboard");
-      } else {
-        navigate("/student/dashboard");
-      }
-    } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
-    } finally {
-      setLoading(false);
+  e.preventDefault();
+  setError("");
+  setLoading(true);
+  
+  try {
+    const user = await login(email, password);
+    if (user.role === "examiner") {
+      navigate("/examiner/dashboard");
+    } else {
+      navigate("/student/dashboard");
     }
-  };
+  } catch (err) {
+    // More robust error handling
+    console.error("Login error:", err);
+    
+    let errorMessage = "Login failed";
+    
+    if (err.response) {
+      // Server responded with error
+      errorMessage = err.response.data?.message || err.response.data?.error || errorMessage;
+    } else if (err.request) {
+      // Request made but no response
+      errorMessage = "No response from server. Please check your connection.";
+    } else {
+      // Something else happened
+      errorMessage = err.message || errorMessage;
+    }
+    
+    setError(errorMessage);
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="auth-container">

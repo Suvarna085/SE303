@@ -27,6 +27,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
+    try{
     const response = await api.post("/auth/login", { email, password });
     const { token, user } = response.data.data;
 
@@ -35,6 +36,14 @@ export const AuthProvider = ({ children }) => {
     setUser(user);
 
     return user;
+    }catch(err){
+      if(err.response){
+        const msg = err.response.data?.message || err.response.data?.error || "Invalid email or password";
+        throw new Error(msg);
+      }else{
+        throw new Error("Unable to connect to the server. Please try again.");
+      }
+    }
   };
 
   const register = async (name, email, password, role) => {
