@@ -1,19 +1,20 @@
 // Suvarna
-const express = require("express");
-const router = express.Router();
-const {
+import express from "express";
+import  {
   register,
   login,
   logout,
   getProfile,
-} = require("../controllers/authController");
-const {
+} from "../controllers/authController.js";
+
+import  {
   registerValidation,
   loginValidation,
   validate,
-} = require("../utils/validators");
-const { authenticate } = require("../middleware/auth");
+} from "../utils/validators.js";
+import { authenticate } from "../middleware/auth.js";
 
+const router = express.Router();
 // Public routes
 router.post("/register", registerValidation, validate, register);
 router.post("/login", loginValidation, validate, login);
@@ -22,4 +23,4 @@ router.post("/login", loginValidation, validate, login);
 router.post("/logout", authenticate, logout);
 router.get("/profile", authenticate, getProfile);
 
-module.exports = router;
+export default router;

@@ -8,10 +8,6 @@ export default function ExamResults() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchResults();
-  }, []);
-
   const fetchResults = async () => {
     try {
       const response = await api.get("/student/results");
@@ -22,6 +18,11 @@ export default function ExamResults() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchResults();
+  }, []);
+
 
   return (
     <div className="dashboard">

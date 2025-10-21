@@ -8,10 +8,6 @@ export default function Analytics() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchAnalytics();
-  }, []);
-
   const fetchAnalytics = async () => {
     try {
       const response = await api.get(`/examiner/exams/${examId}/analytics`);
@@ -25,6 +21,11 @@ export default function Analytics() {
     }
   };
 
+  useEffect(() => {
+    fetchAnalytics();
+  }, []);
+
+
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -35,7 +36,7 @@ export default function Analytics() {
     return <div className="loading">Loading analytics...</div>;
   }
 
-  if (!analytics) return null;
+  if (analytics==null) return null;
 
   const { exam, results, statistics } = analytics;
   const hasResults = results.length > 0;
@@ -95,7 +96,6 @@ export default function Analytics() {
           </div>
 
           <div className="stat-card">
-            <div className="stat-icon">🎯</div>
             <div className="stat-info">
               <h3>Average Percentage</h3>
               <p className="stat-number">
@@ -105,19 +105,13 @@ export default function Analytics() {
           </div>
 
           <div className="stat-card">
-            <div className="stat-icon">
-              {hasResults && parseFloat(statistics.averagePercentage) >= 60
-                ? "🟢"
-                : "🔴"}
-            </div>
             <div className="stat-info">
               <h3>Pass Rate</h3>
               <p className="stat-number">
                 {hasResults
-                  ? `${
-                      results.filter((r) => parseFloat(r.percentage) >= 60)
-                        .length
-                    }/${results.length}`
+                  ? `${results.filter((r) => parseFloat(r.percentage) >= 60)
+                    .length
+                  }/${results.length}`
                   : "N/A"}
               </p>
             </div>
@@ -166,11 +160,10 @@ export default function Analytics() {
                       <td>{formatTime(result.time_taken)}</td>
                       <td>
                         <span
-                          className={`status-badge ${
-                            parseFloat(result.percentage) >= 60
+                          className={`status-badge ${parseFloat(result.percentage) >= 60
                               ? "pass-badge"
                               : "fail-badge"
-                          }`}
+                            }`}
                         >
                           {parseFloat(result.percentage) >= 60
                             ? "Pass"

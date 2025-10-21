@@ -11,10 +11,6 @@ export default function StudentDashboard() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const fetchData = async () => {
     try {
       const [examsRes, resultsRes] = await Promise.all([
@@ -29,6 +25,11 @@ export default function StudentDashboard() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
 
   const hasAttempted = (examId) => {
     return results.some((r) => r.exam_id === examId);

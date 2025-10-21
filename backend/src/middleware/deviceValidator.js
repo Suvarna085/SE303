@@ -1,6 +1,6 @@
 // Suvarna
-const { supabaseAdmin } = require("../config/database");
-const { generateDeviceFingerprint } = require("../utils/helpers");
+import { supabaseAdmin } from "../config/database.js";
+import { generateDeviceFingerprint } from "../utils/helpers.js";
 
 // Check if user is already logged in from another device
 const checkDeviceSession = async (req, res, next) => {
@@ -16,7 +16,7 @@ const checkDeviceSession = async (req, res, next) => {
       .eq("is_active", true)
       .single();
 
-    if (error && error.code !== "PGRST116") {
+    if ((error!=null) && (error.code !== "PGRST116")) {
       // PGRST116 = no rows returned
       throw error;
     }
@@ -24,7 +24,7 @@ const checkDeviceSession = async (req, res, next) => {
     // If there's an active session from a different device, prevent access
     if (
       activeSession &&
-      activeSession.device_fingerprint !== currentDeviceFingerprint
+      (activeSession.device_fingerprint !== currentDeviceFingerprint)
     ) {
       return res.status(403).json({
         success: false,
@@ -43,6 +43,4 @@ const checkDeviceSession = async (req, res, next) => {
   }
 };
 
-module.exports = {
-  checkDeviceSession,
-};
+export default checkDeviceSession;

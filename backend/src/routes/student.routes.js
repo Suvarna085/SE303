@@ -1,6 +1,6 @@
-const express = require("express");
-const router = express.Router();
-const {
+import express from "express";
+
+import {
   getAvailableExams,
   startExam,
   submitAnswer,
@@ -8,9 +8,11 @@ const {
   getMyResults,
   getExamResult,
   getExamReview
-} = require("../controllers/studentController");
-const { authenticate, isStudent } = require("../middleware/auth");
+} from "../controllers/studentController.js";
 
+import { authenticate, isStudent } from "../middleware/auth.js";
+
+const router = express.Router();
 // All routes require authentication and student role
 router.use(authenticate, isStudent);
 
@@ -35,4 +37,4 @@ router.get("/exams/:examId/result", getExamResult);
 // Get detailed review of completed exam
 router.get('/attempts/:attemptId/review', getExamReview);
 
-module.exports = router;
+export default router;

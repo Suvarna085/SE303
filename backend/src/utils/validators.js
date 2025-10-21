@@ -1,10 +1,11 @@
 // Napa/Varun
-const { body, validationResult } = require("express-validator");
-const {
+import { body, validationResult } from "express-validator";
+
+import {
   PASSWORD_MIN_LENGTH,
   DIFFICULTY_LEVELS,
   USER_ROLES,
-} = require("./constants");
+} from "./constants.js";
 
 // Validation middleware
 const validate = (req, res, next) => {
@@ -92,7 +93,7 @@ const examCreationValidation = [
     .withMessage("Duration must be between 10 and 180 minutes"),
 ];
 
-module.exports = {
+export {
   validate,
   registerValidation,
   loginValidation,

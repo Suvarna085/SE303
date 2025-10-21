@@ -1,5 +1,5 @@
 // Varun 
-const { model } = require("../config/gemini");
+import { model } from "../config/gemini.js";
 
 // Generate MCQ questions using Gemini API
 const generateQuestions = async (topic, difficulty, numberOfQuestions) => {
@@ -82,6 +82,4 @@ Return the response in this EXACT JSON format:
   }
 };
 
-module.exports = {
-  generateQuestions,
-};
+export default generateQuestions;

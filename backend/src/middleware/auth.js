@@ -1,6 +1,6 @@
 // Suvarna
-const jwt = require("jsonwebtoken");
-const { USER_ROLES } = require("../utils/constants");
+import jwt from "jsonwebtoken";
+import { USER_ROLES } from "../utils/constants.js";
 
 const authenticate = async (req, res, next) => {
   try {
@@ -50,7 +50,7 @@ const isStudent = (req, res, next) => {
   next();
 };
 
-module.exports = {
+export {
   authenticate,
   isExaminer,
   isStudent,

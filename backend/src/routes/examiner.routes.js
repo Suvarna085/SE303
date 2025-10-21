@@ -1,16 +1,19 @@
-const express = require("express");
-const router = express.Router();
-const {
+import express from "express";
+
+import {
   createExam,
   getExamPreview,
   publishExam,
   getMyExams,
   getExamAnalytics,
   getExamLeaderboard
-} = require("../controllers/examinerController");
-const { examCreationValidation, validate } = require("../utils/validators");
-const { authenticate, isExaminer } = require("../middleware/auth");
+} from "../controllers/examinerController.js";
 
+import { examCreationValidation, validate } from "../utils/validators.js";
+
+import { authenticate, isExaminer } from "../middleware/auth.js";
+
+const router = express.Router();
 // All routes require authentication and examiner role
 router.use(authenticate, isExaminer);
 
@@ -32,4 +35,4 @@ router.get("/exams/:examId/analytics", getExamAnalytics);
 // Get leaderboard for exam
 router.get('/exams/:examId/leaderboard', getExamLeaderboard);
 
-module.exports = router;
+export default router;

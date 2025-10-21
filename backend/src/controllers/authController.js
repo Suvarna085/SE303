@@ -1,13 +1,10 @@
 // Suvarna
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const { v4: uuidv4 } = require("uuid");
-const { supabaseAdmin } = require("../config/database");
-const {
-  generateVerificationToken,
-  generateDeviceFingerprint,
-} = require("../utils/helpers");
-const { SESSION_TIMEOUT } = require("../utils/constants");
+
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { supabaseAdmin } from "../config/database.js";
+import { generateDeviceFingerprint } from "../utils/helpers.js";
+import { SESSION_TIMEOUT } from "../utils/constants.js";
 
 // Register new user
 const register = async (req, res) => {
@@ -21,7 +18,7 @@ const register = async (req, res) => {
       .eq("email", email)
       .single();
 
-    if (existingUser) {
+    if (existingUser!=null) {
       return res.status(400).json({
         success: false,
         message: "Email already registered",
@@ -47,7 +44,7 @@ const register = async (req, res) => {
       .select()
       .single();
 
-    if (error) throw error;
+    if (error!=null) throw error;
 
     res.status(201).json({
       success: true,
@@ -81,7 +78,7 @@ const login = async (req, res) => {
       .eq("email", email)
       .single();
 
-    if (error || !user) {
+    if ((error!=null) || (user==null)) {
       return res.status(401).json({
         success: false,
         message: "Invalid email or password",
@@ -184,7 +181,7 @@ const getProfile = async (req, res) => {
       .eq("id", req.user.userId)
       .single();
 
-    if (error) throw error;
+    if (error!=null) throw error;
 
     res.status(200).json({
       success: true,
@@ -200,9 +197,9 @@ const getProfile = async (req, res) => {
   }
 };
 
-module.exports = {
+export {
   register,
   login,
   logout,
-  getProfile,
+  getProfile
 };

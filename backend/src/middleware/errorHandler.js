@@ -32,7 +32,7 @@ const notFound = (req, res, next) => {
   });
 };
 
-module.exports = {
+export {
   errorHandler,
   notFound,
 };

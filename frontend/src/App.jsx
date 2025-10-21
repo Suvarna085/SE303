@@ -11,7 +11,7 @@ import ExamResults from "./components/student/ExamResults";
 import Leaderboard from "./components/examiner/Leaderboard";
 import ExamReview from "./components/student/ExamReview";
 import Analytics from "./components/examiner/Analytics";
-import LandingPage from "./components/LandingPage"; // <-- Import your landing page
+import LandingPage from "./components/LandingPage";
 import "./styles/index.css";
 
 const ProtectedRoute = ({ children, requiredRole }) => {
@@ -38,7 +38,8 @@ const AppRoutes = () => {
   return (
     <Routes>
       {/* Landing Page */}
-      <Route path="/" element={!user ? <LandingPage /> : <Navigate to={user.role === "examiner" ? "/examiner/dashboard" : "/student/dashboard"} />} />
+      <Route path="/" element={!user ? <LandingPage /> : <Navigate 
+      to={user.role === "examiner" ? "/examiner/dashboard" : "/student/dashboard"} />} />
 
       {/* Auth Routes */}
       <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />

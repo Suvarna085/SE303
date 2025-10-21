@@ -1,6 +1,5 @@
-const { supabaseAdmin } = require("../config/database");
-const { generateQuestions } = require("../services/questionGenerationService");
-
+import { supabaseAdmin } from "../config/database.js";
+import generateQuestions from "../services/questionGenerationService.js";
 
 // Suvarna start
 // Publish exam
@@ -74,7 +73,7 @@ const createExam = async (req, res) => {
       .select()
       .single();
 
-    if (examError) throw examError;
+    if (examError!=null) throw examError;
 
     // Insert questions
     const questionsToInsert = generatedQuestions.map((q, index) => ({
@@ -128,7 +127,7 @@ const getExamPreview = async (req, res) => {
       .eq("examiner_id", examinerId)
       .single();
 
-    if (examError || !exam) {
+    if ((examError!=null) || (exam==null)) {
       return res.status(404).json({
         success: false,
         message: "Exam not found",
@@ -142,7 +141,7 @@ const getExamPreview = async (req, res) => {
       .eq("exam_id", examId)
       .order("question_order", { ascending: true });
 
-    if (questionsError) throw questionsError;
+    if (questionsError!=null) throw questionsError;
 
     res.status(200).json({
       success: true,
@@ -174,7 +173,7 @@ const getMyExams = async (req, res) => {
       .eq("examiner_id", examinerId)
       .order("created_at", { ascending: false });
 
-    if (error) throw error;
+    if (error!=null) throw error;
 
     res.status(200).json({
       success: true,
@@ -204,7 +203,7 @@ const getExamAnalytics = async (req, res) => {
       .eq("examiner_id", examinerId)
       .single();
 
-    if (examError || !exam) {
+    if ((examError!=null) || (exam==null)) {
       return res.status(404).json({
         success: false,
         message: "Exam not found",
@@ -223,7 +222,7 @@ const getExamAnalytics = async (req, res) => {
       .eq("exam_id", examId)
       .order("evaluated_at", { ascending: false });
 
-    if (resultsError) throw resultsError;
+    if (resultsError!=null) throw resultsError;
 
     // Calculate statistics
     const totalAttempts = results.length;
@@ -234,7 +233,7 @@ const getExamAnalytics = async (req, res) => {
     const avgPercentage =
       totalAttempts > 0
         ? results.reduce((sum, r) => sum + parseFloat(r.percentage), 0) /
-          totalAttempts
+        totalAttempts
         : 0;
 
     res.status(200).json({
@@ -279,7 +278,7 @@ const getExamLeaderboard = async (req, res) => {
       .order('time_taken', { ascending: true })
       .limit(10);
 
-    if (error) throw error;
+    if (error!=null) throw error;
 
     res.status(200).json({
       success: true,
@@ -297,7 +296,7 @@ const getExamLeaderboard = async (req, res) => {
 // Napa end
 
 // Modules export
-module.exports = {
+export {
   createExam,
   getExamPreview,
   publishExam,

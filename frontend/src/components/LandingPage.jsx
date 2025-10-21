@@ -33,7 +33,7 @@ const LandingPage = () => {
         >
           Register
         </button>
-        
+
       </div>
     </div>
   );

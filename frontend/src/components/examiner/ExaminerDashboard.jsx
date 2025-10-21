@@ -10,10 +10,6 @@ export default function ExaminerDashboard() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchExams();
-  }, []);
-
   const fetchExams = async () => {
     try {
       const response = await api.get("/examiner/exams");
@@ -32,6 +28,11 @@ export default function ExaminerDashboard() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchExams();
+  }, []);
+
 
   const fetchExamStats = async (examId) => {
     try {
@@ -119,7 +120,7 @@ export default function ExaminerDashboard() {
                       style={{ margin: "15px 0", border: "1px solid #eee" }}
                     />
                     <p>
-                      <strong>📊 Statistics:</strong>
+                      <strong>Statistics:</strong>
                     </p>
                     <p style={{ fontSize: "14px", color: "#666" }}>
                       <strong>Total Attempts:</strong>{" "}

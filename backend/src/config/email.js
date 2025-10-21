@@ -1,5 +1,5 @@
 // Suvarna
-const nodemailer = require("nodemailer");
+import { nodemailer } from "nodemailer";
 
 const transporter = nodemailer.createTransport({
   host: process.env.EMAIL_HOST,
@@ -20,4 +20,4 @@ transporter.verify(function (error, success) {
   }
 });
 
-module.exports = transporter;
+export default transporter;

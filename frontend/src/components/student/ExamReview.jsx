@@ -14,10 +14,6 @@ export default function ExamReview() {
     return `${mins} min ${secs} sec`;
   };
 
-  useEffect(() => {
-    fetchReview();
-  }, []);
-
   const fetchReview = async () => {
     try {
       const response = await api.get(`/student/attempts/${attemptId}/review`);
@@ -30,6 +26,11 @@ export default function ExamReview() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchReview();
+  }, []);
+
 
   const getOptionLabel = (num) => {
     const labels = ["A", "B", "C", "D"];
@@ -80,9 +81,8 @@ export default function ExamReview() {
               <div className="stat-content">
                 <h3>Percentage</h3>
                 <p
-                  className={`stat-value ${
-                    result.percentage >= 60 ? "pass-color" : "fail-color"
-                  }`}
+                  className={`stat-value ${result.percentage >= 60 ? "pass-color" : "fail-color"
+                    }`}
                 >
                   {result.percentage}%
                 </p>

@@ -1,12 +1,14 @@
 // Suvarna
-require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
+import dotenv from "dotenv";
+dotenv.config();
 
-const authRoutes = require("./routes/auth.routes");
-const examinerRoutes = require("./routes/examiner.routes");
-const studentRoutes = require("./routes/student.routes");
-const { errorHandler, notFound } = require("./middleware/errorHandler");
+import express, { json, urlencoded } from "express";
+import cors from "cors";
+
+import authRoutes from "./routes/auth.routes.js";
+import examinerRoutes from "./routes/examiner.routes.js";
+import studentRoutes from "./routes/student.routes.js";
+import { errorHandler, notFound } from "./middleware/errorHandler.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -18,8 +20,8 @@ app.use(
     credentials: true,
   })
 );
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(json());
+app.use(urlencoded({ extended: true }));
 
 // Routes
 app.get("/", (req, res) => {

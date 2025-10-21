@@ -15,6 +15,22 @@ export default function TakeExam() {
   const [submitting, setSubmitting] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
 
+  const startExam = async () => {
+    try {
+      const response = await api.post(`/student/exams/${examId}/start`);
+      const data = response.data.data;
+      setExam(data.exam);
+      setQuestions(data.questions);
+      setAttemptId(data.attemptId);
+      setTimeLeft(data.exam.duration * 60);
+    } catch (error) {
+      alert(error.response?.data?.message || "Failed to start exam");
+      navigate("/student/dashboard");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     startExam();
   }, []);
@@ -35,21 +51,7 @@ export default function TakeExam() {
     return () => clearInterval(timer);
   }, [timeLeft]);
 
-  const startExam = async () => {
-    try {
-      const response = await api.post(`/student/exams/${examId}/start`);
-      const data = response.data.data;
-      setExam(data.exam);
-      setQuestions(data.questions);
-      setAttemptId(data.attemptId);
-      setTimeLeft(data.exam.duration * 60);
-    } catch (error) {
-      alert(error.response?.data?.message || "Failed to start exam");
-      navigate("/student/dashboard");
-    } finally {
-      setLoading(false);
-    }
-  };
+
 
   const handleAnswer = async (questionId, option) => {
     setAnswers({ ...answers, [questionId]: option });
@@ -65,23 +67,23 @@ export default function TakeExam() {
     }
   };
 
-const handleSubmit = async (auto=false) => {
-  if (!auto && !window.confirm("Are you sure you want to submit the exam?")) {
-    return;
-  }
+  const handleSubmit = async (auto = false) => {
+    if (!auto && !window.confirm("Are you sure you want to submit the exam?")) {
+      return;
+    }
 
-  try {
-    const response = await api.post(`/student/attempts/${attemptId}/submit`);
-    const result = response.data.data;
-    setSubmitting(true);
-    
-    // Redirect to review page instead of dashboard
-    navigate(`/student/attempts/${attemptId}/review`);
-  } catch (error) {
-    alert("Failed to submit exam");
-    setSubmitting(false);
-  }
-};
+    try {
+      const response = await api.post(`/student/attempts/${attemptId}/submit`);
+      const result = response.data.data;
+      setSubmitting(true);
+
+      // Redirect to review page instead of dashboard
+      navigate(`/student/attempts/${attemptId}/review`);
+    } catch (error) {
+      alert("Failed to submit exam");
+      setSubmitting(false);
+    }
+  };
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
@@ -114,9 +116,8 @@ const handleSubmit = async (auto=false) => {
           {["a", "b", "c", "d"].map((opt, idx) => (
             <div
               key={opt}
-              className={`option ${
-                answers[question.id] === idx + 1 ? "selected" : ""
-              }`}
+              className={`option ${answers[question.id] === idx + 1 ? "selected" : ""
+                }`}
               onClick={() => handleAnswer(question.id, idx + 1)}
             >
               <span className="option-label">{opt.toUpperCase()}</span>

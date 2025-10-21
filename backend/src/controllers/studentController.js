@@ -1,5 +1,5 @@
-const { supabaseAdmin } = require("../config/database");
-const { shuffleArray, calculatePercentage } = require("../utils/helpers");
+import {supabaseAdmin} from "../config/database.js"
+import { shuffleArray, calculatePercentage } from "../utils/helpers.js";
 
 // Get all published exams available to students
 const getAvailableExams = async (req, res) => {
@@ -247,13 +247,6 @@ const submitExam = async (req, res) => {
     const diffInMilliseconds = endTimeUTC - startTimeUTC;
     const timeTakenSeconds = Math.max(1, Math.ceil(diffInMilliseconds / 1000));
       
-      
-    // const startTimeUTC = new Date(attempt.start_time).getTime(); // removed "Z"
-    // const endTimeUTC = currentTime.getTime();
-    // const diffInMilliseconds = endTimeUTC - startTimeUTC;
-    // const timeTakenSeconds = Math.max(1, Math.ceil(diffInMilliseconds / 1000));
-    
-
     console.log("Time calculation debug:");
     console.log("Difference (ms):", diffInMilliseconds);
     console.log("Time taken (sec):", timeTakenSeconds);
@@ -275,7 +268,7 @@ const submitExam = async (req, res) => {
       .select()
       .single();
 
-    if (resultError) throw resultError;
+    if (resultError!=null) throw resultError;
 
     res.status(200).json({
       success: true,
@@ -313,7 +306,7 @@ const getMyResults = async (req, res) => {
       .eq("student_id", studentId)
       .order("evaluated_at", { ascending: false });
 
-    if (error) throw error;
+    if (error!=null) throw error;
 
     res.status(200).json({
       success: true,
@@ -349,7 +342,7 @@ const getExamResult = async (req, res) => {
       .eq("exam_id", examId)
       .single();
 
-    if (resultError || !result) {
+    if ((resultError!=null) || (result==null)) {
       return res.status(404).json({
         success: false,
         message: "Result not found",
@@ -385,7 +378,7 @@ const getExamReview = async (req, res) => {
       .eq("is_submitted", true)
       .single();
 
-    if (attemptError || !attempt) {
+    if ((attemptError!=null) || (attempt==null)) {
       return res.status(404).json({
         success: false,
         message: "Exam attempt not found or not submitted",
@@ -399,7 +392,7 @@ const getExamReview = async (req, res) => {
       .eq("exam_id", attempt.exam_id)
       .order("question_order", { ascending: true });
 
-    if (questionsError) throw questionsError;
+    if (questionsError!=null) throw questionsError;
 
     // Get student responses
     const { data: responses, error: responsesError } = await supabaseAdmin
@@ -407,7 +400,7 @@ const getExamReview = async (req, res) => {
       .select("*")
       .eq("attempt_id", attemptId);
 
-    if (responsesError) throw responsesError;
+    if (responsesError!=null) throw responsesError;
 
     // Get result
     const { data: result, error: resultError } = await supabaseAdmin
@@ -416,7 +409,7 @@ const getExamReview = async (req, res) => {
       .eq("attempt_id", attemptId)
       .single();
 
-    if (resultError) throw resultError;
+    if (resultError!=null) throw resultError;
 
     // Combine questions with responses
     const reviewData = questions.map((q) => {
@@ -466,7 +459,7 @@ const getExamReview = async (req, res) => {
   }
 };
 
-module.exports = {
+export {
   getAvailableExams,
   startExam,
   submitAnswer,
