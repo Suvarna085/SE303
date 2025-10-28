@@ -11,14 +11,22 @@ import { SESSION_TIMEOUT } from '../utils/constants.js';
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
-  port: 587,
-  secure: false, // 'false' uses STARTTLS. This is still secure.
+  port: 465,
+  secure: true, // 'false' uses STARTTLS. This is still secure.
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASSWORD,
   },
 });
 
+// Verify transporter configuration on startup
+transporter.verify((error, success) => {
+  if (error) {
+    console.error('❌ Email transporter configuration error:', error);
+  } else {
+    console.log('✅ Email server is ready to send emails');
+  }
+});
 
 // Register new user
 const register = async (req, res) => {
@@ -54,9 +62,9 @@ const register = async (req, res) => {
           email,
           password_hash: passwordHash,
           role,
-          is_email_verified: false, // <-- CHANGED
-          verification_token: verificationToken, // <-- ADDED
-          verification_token_expires: verificationTokenExpires, // <-- ADDED
+          is_email_verified: false,
+          verification_token: verificationToken,
+          verification_token_expires: verificationTokenExpires,
         },
       ])
       .select()
@@ -64,26 +72,42 @@ const register = async (req, res) => {
 
     if (error) throw error;
 
-    // --- Send verification email ---
-    const verificationURL = `${process.env.SITE_URL}/api/auth/verify-email?token=${verificationToken}`;
+    // --- Send verification email with better error handling ---
+    try {
+      const verificationURL = `${process.env.SITE_URL}/api/auth/verify-email?token=${verificationToken}`;
 
-    const mailOptions = {
-      from: `"Quiz App" <${process.env.EMAIL_USER}>`,
-      to: email,
-      subject: 'Confirm Your Signup',
-      html: `
-        <h2>Confirm your signup</h2>
-        <p>Follow this link to confirm your user:</p>
-        <p><a href="${verificationURL}">Confirm your mail</a></p>
-      `,
-    };
+      const mailOptions = {
+        from: `"Quiz App" <${process.env.EMAIL_USER}>`,
+        to: email,
+        subject: 'Confirm Your Signup',
+        html: `
+          <h2>Confirm your signup</h2>
+          <p>Follow this link to confirm your user:</p>
+          <p><a href="${verificationURL}">Confirm your mail</a></p>
+        `,
+      };
 
-    await transporter.sendMail(mailOptions);
+      const info = await transporter.sendMail(mailOptions);
+      console.log('✅ Email sent successfully:', info.messageId);
+    } catch (emailError) {
+      console.error('❌ Email sending failed:', emailError);
+      // User is created but email failed
+      return res.status(201).json({
+        success: true,
+        message: 'Registration successful, but verification email failed to send. Please contact support.',
+        data: {
+          userId: newUser.id,
+          name: newUser.name,
+          email: newUser.email,
+          role: newUser.role,
+        },
+      });
+    }
     // --- End of email sending ---
 
     res.status(201).json({
       success: true,
-      message: 'Registration successful. Please check your email to verify your account.', // <-- CHANGED
+      message: 'Registration successful. Please check your email to verify your account.',
       data: {
         userId: newUser.id,
         name: newUser.name,
@@ -119,14 +143,13 @@ const login = async (req, res) => {
       });
     }
 
-    // --- ADD THIS CHECK ---
+    // Check if email is verified
     if (!user.is_email_verified) {
       return res.status(401).json({
         success: false,
         message: 'Please verify your email before logging in.',
       });
     }
-    // --- END OF ADDED CHECK ---
 
     const isPasswordValid = await bcrypt.compare(password, user.password_hash);
 
@@ -269,7 +292,7 @@ const getProfile = async (req, res) => {
       .eq('id', req.user.userId)
       .single();
 
-    if (error!=null) throw error;
+    if (error != null) throw error;
 
     res.status(200).json({
       success: true,
